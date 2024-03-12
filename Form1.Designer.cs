@@ -94,6 +94,7 @@
             this.btn_trasladar.TabIndex = 5;
             this.btn_trasladar.Text = "Trasladar Poligono";
             this.btn_trasladar.UseVisualStyleBackColor = true;
+            this.btn_trasladar.Click += new System.EventHandler(this.btn_trasladar_Click);
             // 
             // txtLados
             // 

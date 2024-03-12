@@ -50,7 +50,29 @@ namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
             }
         }
 
+        private void btn_trasladar_Click(object sender, EventArgs e)
+        {
+            TrasladarPoligonoAleatoriamente();
+        }
+
+        private void btn_salir_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+
+        }
+
+        private void btn_reiniciar_Click(object sender, EventArgs e)
+        {
+            puntosPoligono = Array.Empty<PointF>();
+            Lienzo.Image = new Bitmap(Lienzo.Width, Lienzo.Height);
+
+            txtescala.Clear();
+            txtLados.Clear();
+            txtrotacion.Clear();
+        }
+
         private PointF[] puntosPoligono = Array.Empty<PointF>();
+        private Random random = new Random();
 
         private void DibujarPoligono()
         {
@@ -171,20 +193,39 @@ namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
             }
         }
 
-        private void btn_salir_Click(object sender, EventArgs e)
+        private void TrasladarPoligonoAleatoriamente()
         {
-            Application.Exit();
+            if (puntosPoligono != null && puntosPoligono.Length > 0)
+            {
+                // Definir la cantidad máxima de traslación en píxeles (ajústala según tus necesidades)
+                int maxTraslacionX = Lienzo.Width / 4;
+                int maxTraslacionY = Lienzo.Height / 4;
 
+                // Aplicar la traslación aleatoria
+                float traslacionX = random.Next(-maxTraslacionX, maxTraslacionX + 1);
+                float traslacionY = random.Next(-maxTraslacionY, maxTraslacionY + 1);
+
+                for (int i = 0; i < puntosPoligono.Length; i++)
+                {
+                    puntosPoligono[i] = new PointF(puntosPoligono[i].X + traslacionX, puntosPoligono[i].Y + traslacionY);
+                }
+
+                DibujarEnPictureBox();
+            }
+            else
+            {
+                MessageBox.Show("Primero dibuja un polígono antes de intentar trasladarlo aleatoriamente.");
+            }
         }
 
-        private void btn_reiniciar_Click(object sender, EventArgs e)
-        {
-            puntosPoligono = Array.Empty<PointF>();
-            Lienzo.Image = new Bitmap(Lienzo.Width, Lienzo.Height);
 
-            txtescala.Clear();
-            txtLados.Clear();
-            txtrotacion.Clear();
-        }
+
+
+
+
+
+
+
+
     }
 }
