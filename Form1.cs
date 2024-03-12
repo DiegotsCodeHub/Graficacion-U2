@@ -174,6 +174,7 @@ namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
         private void btn_salir_Click(object sender, EventArgs e)
         {
             Application.Exit();
+
         }
 
         private void btn_reiniciar_Click(object sender, EventArgs e)

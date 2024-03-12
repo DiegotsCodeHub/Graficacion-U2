@@ -162,7 +162,7 @@
             // 
             // btn_reiniciar
             // 
-            this.btn_reiniciar.Location = new System.Drawing.Point(860, 606);
+            this.btn_reiniciar.Location = new System.Drawing.Point(959, 606);
             this.btn_reiniciar.Name = "btn_reiniciar";
             this.btn_reiniciar.Size = new System.Drawing.Size(75, 23);
             this.btn_reiniciar.TabIndex = 15;
@@ -172,7 +172,7 @@
             // 
             // btn_salir
             // 
-            this.btn_salir.Location = new System.Drawing.Point(941, 606);
+            this.btn_salir.Location = new System.Drawing.Point(1049, 606);
             this.btn_salir.Name = "btn_salir";
             this.btn_salir.Size = new System.Drawing.Size(127, 23);
             this.btn_salir.TabIndex = 16;
