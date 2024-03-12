@@ -163,9 +163,9 @@
             // 
             // btn_reiniciar
             // 
-            this.btn_reiniciar.Location = new System.Drawing.Point(959, 606);
+            this.btn_reiniciar.Location = new System.Drawing.Point(1049, 65);
             this.btn_reiniciar.Name = "btn_reiniciar";
-            this.btn_reiniciar.Size = new System.Drawing.Size(75, 23);
+            this.btn_reiniciar.Size = new System.Drawing.Size(114, 63);
             this.btn_reiniciar.TabIndex = 15;
             this.btn_reiniciar.Text = "Reiniciar poligono";
             this.btn_reiniciar.UseVisualStyleBackColor = true;
@@ -173,11 +173,11 @@
             // 
             // btn_salir
             // 
-            this.btn_salir.Location = new System.Drawing.Point(1049, 606);
+            this.btn_salir.Location = new System.Drawing.Point(1125, 646);
             this.btn_salir.Name = "btn_salir";
             this.btn_salir.Size = new System.Drawing.Size(127, 23);
             this.btn_salir.TabIndex = 16;
-            this.btn_salir.Text = "Salir de la Aplicacion";
+            this.btn_salir.Text = "Volver al menu";
             this.btn_salir.UseVisualStyleBackColor = true;
             this.btn_salir.Click += new System.EventHandler(this.btn_salir_Click);
             // 
