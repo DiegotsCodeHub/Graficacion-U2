@@ -16,7 +16,7 @@ namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmPrincipal());
+            Application.Run(new frmPoligono());
         }
     }
 }

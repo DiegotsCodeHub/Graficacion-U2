@@ -1,6 +1,6 @@
 ﻿namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
 {
-    partial class frmPrincipal
+    partial class frmPoligono
     {
         /// <summary>
         /// Required designer variable.
@@ -181,7 +181,7 @@
             this.btn_salir.UseVisualStyleBackColor = true;
             this.btn_salir.Click += new System.EventHandler(this.btn_salir_Click);
             // 
-            // frmPrincipal
+            // frmPoligono
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -201,7 +201,7 @@
             this.Controls.Add(this.btn_escalar);
             this.Controls.Add(this.btn_dibujar);
             this.Controls.Add(this.lblTitulo);
-            this.Name = "frmPrincipal";
+            this.Name = "frmPoligono";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Proyecto Graficacion Unidad 2";
             ((System.ComponentModel.ISupportInitialize)(this.Lienzo)).EndInit();

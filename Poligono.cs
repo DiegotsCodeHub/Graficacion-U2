@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
 {
-    public partial class frmPrincipal : Form
+    public partial class frmPoligono : Form
     {
-        public frmPrincipal()
+        public frmPoligono()
         {
             InitializeComponent();
         }
