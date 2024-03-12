@@ -41,6 +41,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.Lienzo = new System.Windows.Forms.PictureBox();
+            this.btn_reiniciar = new System.Windows.Forms.Button();
+            this.btn_salir = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Lienzo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -82,6 +84,7 @@
             this.btn_rotar.TabIndex = 4;
             this.btn_rotar.Text = "Rotar Poligono";
             this.btn_rotar.UseVisualStyleBackColor = true;
+            this.btn_rotar.Click += new System.EventHandler(this.btn_rotar_Click);
             // 
             // btn_trasladar
             // 
@@ -157,11 +160,33 @@
             this.Lienzo.TabIndex = 14;
             this.Lienzo.TabStop = false;
             // 
+            // btn_reiniciar
+            // 
+            this.btn_reiniciar.Location = new System.Drawing.Point(860, 606);
+            this.btn_reiniciar.Name = "btn_reiniciar";
+            this.btn_reiniciar.Size = new System.Drawing.Size(75, 23);
+            this.btn_reiniciar.TabIndex = 15;
+            this.btn_reiniciar.Text = "Reiniciar poligono";
+            this.btn_reiniciar.UseVisualStyleBackColor = true;
+            this.btn_reiniciar.Click += new System.EventHandler(this.btn_reiniciar_Click);
+            // 
+            // btn_salir
+            // 
+            this.btn_salir.Location = new System.Drawing.Point(941, 606);
+            this.btn_salir.Name = "btn_salir";
+            this.btn_salir.Size = new System.Drawing.Size(127, 23);
+            this.btn_salir.TabIndex = 16;
+            this.btn_salir.Text = "Salir de la Aplicacion";
+            this.btn_salir.UseVisualStyleBackColor = true;
+            this.btn_salir.Click += new System.EventHandler(this.btn_salir_Click);
+            // 
             // frmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.btn_salir);
+            this.Controls.Add(this.btn_reiniciar);
             this.Controls.Add(this.Lienzo);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -198,6 +223,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox Lienzo;
+        private System.Windows.Forms.Button btn_reiniciar;
+        private System.Windows.Forms.Button btn_salir;
     }
 }
 

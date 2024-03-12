@@ -33,13 +33,24 @@ namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
             }
             else
             {
-                MessageBox.Show("Ingresa un número válido de veces de escalas externas.");
+                MessageBox.Show("Ingresa un número válido de veces de escala del poligono.");
+            }
+        }
+
+        private void btn_rotar_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(txtrotacion.Text, out int gradosrotacion))
+            {
+                // Llama a la función para escalar el polígono
+                RotarPoligono(gradosrotacion);
+            }
+            else
+            {
+                MessageBox.Show("Ingresa grados válidos para la rotacion del poligono.");
             }
         }
 
         private PointF[] puntosPoligono = Array.Empty<PointF>();
-
-
 
         private void DibujarPoligono()
         {
@@ -124,16 +135,55 @@ namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
             }
         }
 
+        private void RotarPoligono(float grados)
+        {
+            if (puntosPoligono != null && puntosPoligono.Length > 0)
+            {
+                // Calcular el centro del polígono
+                PointF centro = new PointF(Lienzo.Width / 2f, Lienzo.Height / 2f);
 
+                // Centrar el polígono en el origen antes de rotar
+                for (int i = 0; i < puntosPoligono.Length; i++)
+                {
+                    puntosPoligono[i] = new PointF(puntosPoligono[i].X - centro.X, puntosPoligono[i].Y - centro.Y);
+                }
 
+                // Rotar el polígono
+                float radianes = grados * (float)Math.PI / 180.0f;
+                for (int i = 0; i < puntosPoligono.Length; i++)
+                {
+                    float x = puntosPoligono[i].X * (float)Math.Cos(radianes) - puntosPoligono[i].Y * (float)Math.Sin(radianes);
+                    float y = puntosPoligono[i].X * (float)Math.Sin(radianes) + puntosPoligono[i].Y * (float)Math.Cos(radianes);
+                    puntosPoligono[i] = new PointF(x, y);
+                }
 
+                // Trasladar el polígono de vuelta a su posición original después de rotar
+                for (int i = 0; i < puntosPoligono.Length; i++)
+                {
+                    puntosPoligono[i] = new PointF(puntosPoligono[i].X + centro.X, puntosPoligono[i].Y + centro.Y);
+                }
 
+                DibujarEnPictureBox();
+            }
+            else
+            {
+                MessageBox.Show("Primero dibuja un polígono antes de intentar rotarlo.");
+            }
+        }
 
+        private void btn_salir_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
 
+        private void btn_reiniciar_Click(object sender, EventArgs e)
+        {
+            puntosPoligono = Array.Empty<PointF>();
+            Lienzo.Image = new Bitmap(Lienzo.Width, Lienzo.Height);
 
-
-
-
-
+            txtescala.Clear();
+            txtLados.Clear();
+            txtrotacion.Clear();
+        }
     }
 }
