@@ -3,56 +3,98 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
 {
+    public enum ShapeType
+    {
+        Polygon
+    }
+
     public partial class frmPoligono : Form
     {
+
+        private Graphics graphics;
+        private Point center;
+        private int sideLength;
+        private PointF[] originalPoints;
+        private PointF[] transformedPoints;
+        private ShapeType currentShape;
+        private Timer timer;
+        private Matrix transformationMatrix;
+        private int numLados = 20; // Número predeterminado de lados
+        private float factorEscala = 1.1f; // Ajusta este valor según tu preferencia
+        private Color colorSeleccionado = Color.Black; // Color predeterminado
+        private Point lastLocation;
+
         public frmPoligono()
         {
             InitializeComponent();
+            Initialize();
         }
 
         private void btn_dibujar_Click(object sender, EventArgs e)
         {
-            // Llama a DibujarPoligono
-            DibujarPoligono();
-        }
-
-        private void btn_escalar_Click(object sender, EventArgs e)
-        {
-            // Obtiene el número de veces de escalas desde la TextBox externa
-            if (int.TryParse(txtescala.Text, out int vecesEscalas))
+            if (int.TryParse(txtLados.Text, out int nuevoNumeroLados) && nuevoNumeroLados > 2)
             {
-                // Llama a la función para escalar el polígono
-                EscalarPoligono(vecesEscalas);
+                numLados = nuevoNumeroLados;
+                InitializeShapes();
             }
             else
             {
-                MessageBox.Show("Ingresa un número válido de veces de escala del poligono.");
+                MessageBox.Show("Ingrese un número válido de lados (mínimo 3).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btn_escalarmas_Click(object sender, EventArgs e)
+        {
+            ApplyTransformation(MatrixForScaling(factorEscala, factorEscala));
+        }
+
+        private void btn_escalarmenos_Click(object sender, EventArgs e)
+        {
+            ApplyTransformation(MatrixForScaling(1.0f / factorEscala, 1.0f / factorEscala));
         }
 
         private void btn_rotar_Click(object sender, EventArgs e)
         {
-            if (int.TryParse(txtrotacion.Text, out int gradosrotacion))
-            {
-                // Llama a la función para escalar el polígono
-                RotarPoligono(gradosrotacion);
-            }
-            else
-            {
-                MessageBox.Show("Ingresa grados válidos para la rotacion del poligono.");
-            }
+            ApplyTransformation(MatrixForRotation(5));
         }
 
         private void btn_trasladar_Click(object sender, EventArgs e)
         {
-            TrasladarPoligonoAleatoriamente();
+            /*
+            ApplyTransformation(MatrixForTranslation(5, 5));
+            ApplyTransformation(transformationMatrix);
+            */
+
+            // Obtener las dimensiones del PictureBox
+            int pbWidth = Lienzo.Width;
+            int pbHeight = Lienzo.Height;
+
+            // Generar valores aleatorios para las coordenadas de traslación
+            Random rnd = new Random();
+            int dx = rnd.Next(-50, 50); // Rango de traslación en el eje x
+            int dy = rnd.Next(-50, 50); // Rango de traslación en el eje y
+
+            // Ajustar las coordenadas de traslación si el polígono sale de los límites del PictureBox
+            if (transformedPoints.Any(p => p.X + dx < 0 || p.X + dx >= pbWidth || p.Y + dy < 0 || p.Y + dy >= pbHeight))
+            {
+                // Si el polígono se sale de los límites, reducimos las coordenadas de traslación
+                dx = (int)Math.Max(-transformedPoints.Min(p => p.X), Math.Min(pbWidth - transformedPoints.Max(p => p.X), dx));
+                dy = (int)Math.Max(-transformedPoints.Min(p => p.Y), Math.Min(pbHeight - transformedPoints.Max(p => p.Y), dy));
+            }
+
+            // Aplicar la traslación a la matriz de transformación
+            transformationMatrix.Multiply(MatrixForTranslation(dx, dy));
+
+            ApplyTransformation(transformationMatrix); // Pasar la matriz de transformación al método
         }
 
         private void btn_salir_Click(object sender, EventArgs e)
@@ -60,171 +102,112 @@ namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
             this.Close();
         }
 
-        private void btn_reiniciar_Click(object sender, EventArgs e)
-        {
-            puntosPoligono = Array.Empty<PointF>();
-            Lienzo.Image = new Bitmap(Lienzo.Width, Lienzo.Height);
+        // FUNCIONES Y METODOS
 
-            txtescala.Clear();
-            txtLados.Clear();
-            txtrotacion.Clear();
+        private void Initialize()
+        {
+            graphics = Lienzo.CreateGraphics();
+            center = new Point(Lienzo.Width / 2, Lienzo.Height / 2);
+            sideLength = 50;
+            currentShape = ShapeType.Polygon;
+            InitializeShapes();
+
+            timer = new Timer();
+            timer.Interval = 50;
+            timer.Tick += Timer_Tick;
+
+            transformationMatrix = new Matrix();
         }
 
-        private PointF[] puntosPoligono = Array.Empty<PointF>();
-        private Random random = new Random();
+        private void InitializeShapes()
+        {
+            originalPoints = new PointF[numLados];
+            transformedPoints = new PointF[numLados];
 
-        private void DibujarPoligono()
-        {
-            if (int.TryParse(txtLados.Text, out int lados))
+            for (int i = 0; i < numLados; i++)
             {
-                if (lados == 1)
-                {
-                    MessageBox.Show("Favor de ingresar un numero mayor a 1.");
-                }
-                else
-                {
-                    puntosPoligono = CalcularPuntosPoligono(lados);
-                    DibujarEnPictureBox();
-                }
+                double angle = 2 * Math.PI * i / numLados;
+                originalPoints[i] = new PointF(center.X + (float)(sideLength * Math.Cos(angle)), center.Y + (float)(sideLength * Math.Sin(angle)));
             }
-            else
-            {
-                MessageBox.Show("Ingresa un número válido de lados.");
-            }
-        }
-        private void DibujarEnPictureBox()
-        {
-            Lienzo.Image = new Bitmap(Lienzo.Width, Lienzo.Height);
-            using (Graphics g = Graphics.FromImage(Lienzo.Image))
-            {
-                g.Clear(Lienzo.BackColor);
-                g.DrawPolygon(Pens.Black, puntosPoligono);
-            }
+
+            Array.Copy(originalPoints, transformedPoints, numLados);
+            DrawShape();
         }
 
-        private PointF[] CalcularPuntosPoligono(int lados)
+        private void DrawShape()
         {
-            int centroX = Lienzo.Width / 2;
-            int centroY = Lienzo.Height / 2;
-            int radio = Math.Min(Lienzo.Width, Lienzo.Height) / 4;
+            graphics.Clear(Color.White);
+            graphics.DrawPolygon(Pens.Black, transformedPoints);
 
-            PointF[] puntos = new PointF[lados];
-            for (int i = 0; i < lados; i++)
+            using (Pen pen = new Pen(colorSeleccionado, 1.0f))
             {
-                double angulo = 2 * Math.PI * i / lados;
-                float x = centroX + (float)(radio * Math.Cos(angulo));
-                float y = centroY + (float)(radio * Math.Sin(angulo));
-                puntos[i] = new PointF(x, y);
+                graphics.DrawPolygon(pen, transformedPoints);
             }
+            graphics.FillPolygon(new SolidBrush(colorSeleccionado), transformedPoints);
 
-            return puntos;
         }
 
-        private void EscalarPoligono(int veces)
+        private void ApplyTransformation(Matrix matrix)
         {
-            if (puntosPoligono != null && puntosPoligono.Length > 0)
-            {
-                // Calcular el centro del polígono
-                PointF centro = new PointF(Lienzo.Width / 2f, Lienzo.Height / 2f);
-
-                // Centrar el polígono en el origen antes de escalar
-                for (int i = 0; i < puntosPoligono.Length; i++)
-                {
-                    puntosPoligono[i] = new PointF(puntosPoligono[i].X - centro.X, puntosPoligono[i].Y - centro.Y);
-                }
-
-                // Escalar el polígono la cantidad de veces especificada
-                for (int v = 0; v < veces; v++)
-                {
-                    for (int i = 0; i < puntosPoligono.Length; i++)
-                    {
-                        puntosPoligono[i] = new PointF(puntosPoligono[i].X * 1.2f, puntosPoligono[i].Y * 1.2f);
-                    }
-                }
-
-                // Trasladar el polígono de vuelta a su posición original después de escalar
-                for (int i = 0; i < puntosPoligono.Length; i++)
-                {
-                    puntosPoligono[i] = new PointF(puntosPoligono[i].X + centro.X, puntosPoligono[i].Y + centro.Y);
-                }
-
-                DibujarEnPictureBox();
-            }
-            else
-            {
-                MessageBox.Show("Primero dibuja un polígono antes de intentar escalarlo.");
-            }
+            matrix.TransformPoints(transformedPoints);
+            DrawShape();
         }
 
-        private void RotarPoligono(float grados)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            if (puntosPoligono != null && puntosPoligono.Length > 0)
+            ApplyTransformation(MatrixForTranslation(1, 1));
+            ApplyTransformation(MatrixForRotation(1));
+        }
+
+        private Matrix MatrixForTranslation(float dx, float dy)
+        {
+            Matrix translationMatrix = new Matrix();
+            translationMatrix.Translate(dx, dy);
+            return translationMatrix;
+        }
+
+        private Matrix MatrixForScaling(float scaleX, float scaleY)
+        {
+            // Escala alrededor del punto central del polígono
+            Matrix scalingMatrix = new Matrix();
+            scalingMatrix.Translate(center.X, center.Y);        // Traslada al centro
+            scalingMatrix.Scale(scaleX, scaleY);                 // Aplica la escala
+            scalingMatrix.Translate(-center.X, -center.Y);      // Traslada de vuelta
+
+            return scalingMatrix;
+        }
+
+        private Matrix MatrixForRotation(float angle)
+        {
+            // Rota alrededor del punto central del polígono
+            Matrix rotationMatrix = new Matrix();
+            rotationMatrix.Translate(center.X, center.Y);  // Traslada al centro
+            rotationMatrix.Rotate(angle);                   // Aplica la rotación
+            rotationMatrix.Translate(-center.X, -center.Y); // Traslada de vuelta
+
+            return rotationMatrix;
+        }
+
+        private void btn_color_Click(object sender, EventArgs e)
+        {
+            // Abre el diálogo de selección de color
+            ColorDialog colorDialog = new ColorDialog();
+
+            // Establece el color inicial en el diálogo
+            colorDialog.Color = colorSeleccionado;
+
+            if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                // Calcular el centro del polígono
-                PointF centro = new PointF(Lienzo.Width / 2f, Lienzo.Height / 2f);
-
-                // Centrar el polígono en el origen antes de rotar
-                for (int i = 0; i < puntosPoligono.Length; i++)
-                {
-                    puntosPoligono[i] = new PointF(puntosPoligono[i].X - centro.X, puntosPoligono[i].Y - centro.Y);
-                }
-
-                // Rotar el polígono
-                float radianes = grados * (float)Math.PI / 180.0f;
-                for (int i = 0; i < puntosPoligono.Length; i++)
-                {
-                    float x = puntosPoligono[i].X * (float)Math.Cos(radianes) - puntosPoligono[i].Y * (float)Math.Sin(radianes);
-                    float y = puntosPoligono[i].X * (float)Math.Sin(radianes) + puntosPoligono[i].Y * (float)Math.Cos(radianes);
-                    puntosPoligono[i] = new PointF(x, y);
-                }
-
-                // Trasladar el polígono de vuelta a su posición original después de rotar
-                for (int i = 0; i < puntosPoligono.Length; i++)
-                {
-                    puntosPoligono[i] = new PointF(puntosPoligono[i].X + centro.X, puntosPoligono[i].Y + centro.Y);
-                }
-
-                DibujarEnPictureBox();
-            }
-            else
-            {
-                MessageBox.Show("Primero dibuja un polígono antes de intentar rotarlo.");
+                // Si se selecciona un color, actualiza el color y vuelve a dibujar el polígono
+                colorSeleccionado = colorDialog.Color;
+                DrawShape();
             }
         }
 
-        private void TrasladarPoligonoAleatoriamente()
+        private void Lienzo_MouseDown(object sender, MouseEventArgs e)
         {
-            if (puntosPoligono != null && puntosPoligono.Length > 0)
-            {
-                // Definir la cantidad máxima de traslación en píxeles (ajústala según tus necesidades)
-                int maxTraslacionX = Lienzo.Width / 4;
-                int maxTraslacionY = Lienzo.Height / 4;
-
-                // Aplicar la traslación aleatoria
-                float traslacionX = random.Next(-maxTraslacionX, maxTraslacionX + 1);
-                float traslacionY = random.Next(-maxTraslacionY, maxTraslacionY + 1);
-
-                for (int i = 0; i < puntosPoligono.Length; i++)
-                {
-                    puntosPoligono[i] = new PointF(puntosPoligono[i].X + traslacionX, puntosPoligono[i].Y + traslacionY);
-                }
-
-                DibujarEnPictureBox();
-            }
-            else
-            {
-                MessageBox.Show("Primero dibuja un polígono antes de intentar trasladarlo aleatoriamente.");
-            }
+            lastLocation = e.Location;
         }
-
-
-
-
-
-
-
-
-
 
     }
 }

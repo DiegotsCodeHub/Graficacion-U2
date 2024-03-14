@@ -30,19 +30,16 @@
         {
             this.lblTitulo = new System.Windows.Forms.Label();
             this.btn_dibujar = new System.Windows.Forms.Button();
-            this.btn_escalar = new System.Windows.Forms.Button();
+            this.btn_escalarmas = new System.Windows.Forms.Button();
             this.btn_rotar = new System.Windows.Forms.Button();
             this.btn_trasladar = new System.Windows.Forms.Button();
             this.txtLados = new System.Windows.Forms.TextBox();
-            this.txtescala = new System.Windows.Forms.TextBox();
-            this.txtrotacion = new System.Windows.Forms.TextBox();
             this.lblcantidadlados = new System.Windows.Forms.Label();
-            this.lblescala = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.Lienzo = new System.Windows.Forms.PictureBox();
-            this.btn_reiniciar = new System.Windows.Forms.Button();
             this.btn_salir = new System.Windows.Forms.Button();
+            this.btn_escalarmenos = new System.Windows.Forms.Button();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.btn_color = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Lienzo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,29 +55,29 @@
             // 
             // btn_dibujar
             // 
-            this.btn_dibujar.Location = new System.Drawing.Point(823, 113);
+            this.btn_dibujar.Location = new System.Drawing.Point(823, 98);
             this.btn_dibujar.Name = "btn_dibujar";
-            this.btn_dibujar.Size = new System.Drawing.Size(100, 23);
+            this.btn_dibujar.Size = new System.Drawing.Size(108, 52);
             this.btn_dibujar.TabIndex = 2;
             this.btn_dibujar.Text = "Dibujar Poligono";
             this.btn_dibujar.UseVisualStyleBackColor = true;
             this.btn_dibujar.Click += new System.EventHandler(this.btn_dibujar_Click);
             // 
-            // btn_escalar
+            // btn_escalarmas
             // 
-            this.btn_escalar.Location = new System.Drawing.Point(929, 172);
-            this.btn_escalar.Name = "btn_escalar";
-            this.btn_escalar.Size = new System.Drawing.Size(108, 23);
-            this.btn_escalar.TabIndex = 3;
-            this.btn_escalar.Text = "Escalar Poligono";
-            this.btn_escalar.UseVisualStyleBackColor = true;
-            this.btn_escalar.Click += new System.EventHandler(this.btn_escalar_Click);
+            this.btn_escalarmas.Location = new System.Drawing.Point(965, 98);
+            this.btn_escalarmas.Name = "btn_escalarmas";
+            this.btn_escalarmas.Size = new System.Drawing.Size(108, 52);
+            this.btn_escalarmas.TabIndex = 3;
+            this.btn_escalarmas.Text = "Escalar mas";
+            this.btn_escalarmas.UseVisualStyleBackColor = true;
+            this.btn_escalarmas.Click += new System.EventHandler(this.btn_escalarmas_Click);
             // 
             // btn_rotar
             // 
-            this.btn_rotar.Location = new System.Drawing.Point(1144, 170);
+            this.btn_rotar.Location = new System.Drawing.Point(1113, 156);
             this.btn_rotar.Name = "btn_rotar";
-            this.btn_rotar.Size = new System.Drawing.Size(108, 23);
+            this.btn_rotar.Size = new System.Drawing.Size(108, 52);
             this.btn_rotar.TabIndex = 4;
             this.btn_rotar.Text = "Rotar Poligono";
             this.btn_rotar.UseVisualStyleBackColor = true;
@@ -88,9 +85,9 @@
             // 
             // btn_trasladar
             // 
-            this.btn_trasladar.Location = new System.Drawing.Point(987, 230);
+            this.btn_trasladar.Location = new System.Drawing.Point(1113, 98);
             this.btn_trasladar.Name = "btn_trasladar";
-            this.btn_trasladar.Size = new System.Drawing.Size(108, 23);
+            this.btn_trasladar.Size = new System.Drawing.Size(108, 52);
             this.btn_trasladar.TabIndex = 5;
             this.btn_trasladar.Text = "Trasladar Poligono";
             this.btn_trasladar.UseVisualStyleBackColor = true;
@@ -98,107 +95,73 @@
             // 
             // txtLados
             // 
-            this.txtLados.Location = new System.Drawing.Point(823, 87);
+            this.txtLados.Location = new System.Drawing.Point(1030, 55);
             this.txtLados.Name = "txtLados";
-            this.txtLados.Size = new System.Drawing.Size(100, 20);
+            this.txtLados.Size = new System.Drawing.Size(108, 20);
             this.txtLados.TabIndex = 6;
-            // 
-            // txtescala
-            // 
-            this.txtescala.Location = new System.Drawing.Point(823, 174);
-            this.txtescala.Name = "txtescala";
-            this.txtescala.Size = new System.Drawing.Size(100, 20);
-            this.txtescala.TabIndex = 7;
-            // 
-            // txtrotacion
-            // 
-            this.txtrotacion.Location = new System.Drawing.Point(1043, 172);
-            this.txtrotacion.Name = "txtrotacion";
-            this.txtrotacion.Size = new System.Drawing.Size(100, 20);
-            this.txtrotacion.TabIndex = 8;
             // 
             // lblcantidadlados
             // 
             this.lblcantidadlados.AutoSize = true;
-            this.lblcantidadlados.Location = new System.Drawing.Point(820, 68);
+            this.lblcantidadlados.Location = new System.Drawing.Point(867, 58);
             this.lblcantidadlados.Name = "lblcantidadlados";
             this.lblcantidadlados.Size = new System.Drawing.Size(157, 13);
             this.lblcantidadlados.TabIndex = 10;
             this.lblcantidadlados.Text = "Cantidad de Lados del Poligono";
             // 
-            // lblescala
-            // 
-            this.lblescala.AutoSize = true;
-            this.lblescala.Location = new System.Drawing.Point(822, 156);
-            this.lblescala.Name = "lblescala";
-            this.lblescala.Size = new System.Drawing.Size(212, 13);
-            this.lblescala.TabIndex = 11;
-            this.lblescala.Text = "Cuantas veces quieres escalar el poligono?";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1046, 156);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(202, 13);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Cuantos grados quieres rotar el poligono?";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(888, 214);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(304, 13);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "Usa este boton para que se traslade aleatoriamente el poligono";
-            // 
             // Lienzo
             // 
             this.Lienzo.Location = new System.Drawing.Point(12, 11);
             this.Lienzo.Name = "Lienzo";
+            this.Lienzo.Padding = new System.Windows.Forms.Padding(100);
             this.Lienzo.Size = new System.Drawing.Size(791, 658);
             this.Lienzo.TabIndex = 14;
             this.Lienzo.TabStop = false;
             // 
-            // btn_reiniciar
-            // 
-            this.btn_reiniciar.Location = new System.Drawing.Point(1049, 65);
-            this.btn_reiniciar.Name = "btn_reiniciar";
-            this.btn_reiniciar.Size = new System.Drawing.Size(114, 63);
-            this.btn_reiniciar.TabIndex = 15;
-            this.btn_reiniciar.Text = "Reiniciar poligono";
-            this.btn_reiniciar.UseVisualStyleBackColor = true;
-            this.btn_reiniciar.Click += new System.EventHandler(this.btn_reiniciar_Click);
-            // 
             // btn_salir
             // 
-            this.btn_salir.Location = new System.Drawing.Point(1125, 646);
+            this.btn_salir.Location = new System.Drawing.Point(823, 232);
             this.btn_salir.Name = "btn_salir";
-            this.btn_salir.Size = new System.Drawing.Size(127, 23);
+            this.btn_salir.Size = new System.Drawing.Size(398, 52);
             this.btn_salir.TabIndex = 16;
             this.btn_salir.Text = "Volver al menu";
             this.btn_salir.UseVisualStyleBackColor = true;
             this.btn_salir.Click += new System.EventHandler(this.btn_salir_Click);
             // 
+            // btn_escalarmenos
+            // 
+            this.btn_escalarmenos.Location = new System.Drawing.Point(965, 156);
+            this.btn_escalarmenos.Name = "btn_escalarmenos";
+            this.btn_escalarmenos.Size = new System.Drawing.Size(108, 52);
+            this.btn_escalarmenos.TabIndex = 17;
+            this.btn_escalarmenos.Text = "Escalar menos";
+            this.btn_escalarmenos.UseVisualStyleBackColor = true;
+            this.btn_escalarmenos.Click += new System.EventHandler(this.btn_escalarmenos_Click);
+            // 
+            // btn_color
+            // 
+            this.btn_color.Location = new System.Drawing.Point(823, 156);
+            this.btn_color.Name = "btn_color";
+            this.btn_color.Size = new System.Drawing.Size(108, 52);
+            this.btn_color.TabIndex = 18;
+            this.btn_color.Text = "Cambia el color del poligono";
+            this.btn_color.UseVisualStyleBackColor = true;
+            this.btn_color.Click += new System.EventHandler(this.btn_color_Click);
+            // 
             // frmPoligono
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.ClientSize = new System.Drawing.Size(1253, 681);
+            this.Controls.Add(this.btn_color);
+            this.Controls.Add(this.btn_escalarmenos);
             this.Controls.Add(this.btn_salir);
-            this.Controls.Add(this.btn_reiniciar);
             this.Controls.Add(this.Lienzo);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.lblescala);
             this.Controls.Add(this.lblcantidadlados);
-            this.Controls.Add(this.txtrotacion);
-            this.Controls.Add(this.txtescala);
             this.Controls.Add(this.txtLados);
             this.Controls.Add(this.btn_trasladar);
             this.Controls.Add(this.btn_rotar);
-            this.Controls.Add(this.btn_escalar);
+            this.Controls.Add(this.btn_escalarmas);
             this.Controls.Add(this.btn_dibujar);
             this.Controls.Add(this.lblTitulo);
             this.Name = "frmPoligono";
@@ -213,19 +176,16 @@
         #endregion
         private System.Windows.Forms.Label lblTitulo;
         private System.Windows.Forms.Button btn_dibujar;
-        private System.Windows.Forms.Button btn_escalar;
+        private System.Windows.Forms.Button btn_escalarmas;
         private System.Windows.Forms.Button btn_rotar;
         private System.Windows.Forms.Button btn_trasladar;
         private System.Windows.Forms.TextBox txtLados;
-        private System.Windows.Forms.TextBox txtescala;
-        private System.Windows.Forms.TextBox txtrotacion;
         private System.Windows.Forms.Label lblcantidadlados;
-        private System.Windows.Forms.Label lblescala;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox Lienzo;
-        private System.Windows.Forms.Button btn_reiniciar;
         private System.Windows.Forms.Button btn_salir;
+        private System.Windows.Forms.Button btn_escalarmenos;
+        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.Button btn_color;
     }
 }
 
