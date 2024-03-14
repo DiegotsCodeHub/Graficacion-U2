@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +13,15 @@ namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
 {
     public partial class frm_imagen : Form
     {
+        private Bitmap originalImage;
+        private Bitmap transformedImage;
+        private Matrix transformationMatrix;
+        private float scaleFactor = 1.1f; // Ajusta este valor según tu preferencia
+
         public frm_imagen()
         {
             InitializeComponent();
+            Initialize();
         }
 
         private void btn_salir_Click(object sender, EventArgs e)
@@ -24,104 +31,122 @@ namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
 
         private void btn_cargarimagen_Click(object sender, EventArgs e)
         {
-            // Configurar el diálogo para que solo muestre archivos de imagen
-            openFileDialog1.Filter = "Archivos de imagen|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
-
-            // Mostrar el diálogo y esperar a que el usuario seleccione un archivo
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                // Obtener la ruta del archivo seleccionado
-                string rutaImagen = openFileDialog1.FileName;
-
-                // Cargar la imagen en el PictureBox
-                CargarImagen(rutaImagen);
+                openFileDialog.Filter = "Archivos de imagen|*.bmp;*.jpg;*.jpeg;*.png;*.gif|Todos los archivos|*.*";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Cargar la imagen seleccionada
+                    LoadImage(openFileDialog.FileName);
+                }
             }
         }
 
         private void btn_trasladar_Click(object sender, EventArgs e)
         {
-            TrasladarImagenAleatoriamente();
+            // Obtener las dimensiones del PictureBox
+            int pbWidth = Portaretrato.Width;
+            int pbHeight = Portaretrato.Height;
+
+            // Generar valores aleatorios para las coordenadas de traslación
+            Random rnd = new Random();
+            int dx = rnd.Next(-50, 50); // Rango de traslación en el eje x
+            int dy = rnd.Next(-50, 50); // Rango de traslación en el eje y
+
+            // Ajustar las coordenadas de traslación si la imagen se sale de los límites del PictureBox
+            if (Portaretrato.Location.X + dx < 0 || Portaretrato.Location.X + dx >= pbWidth || Portaretrato.Location.Y + dy < 0 || Portaretrato.Location.Y + dy >= pbHeight)
+            {
+                // Si la imagen se sale de los límites, reducimos las coordenadas de traslación
+                dx = Math.Max(-Portaretrato.Location.X, Math.Min(pbWidth - Portaretrato.Location.X - Portaretrato.Width, dx));
+                dy = Math.Max(-Portaretrato.Location.Y, Math.Min(pbHeight - Portaretrato.Location.Y - Portaretrato.Height, dy));
+            }
+
+            // Aplicar la traslación a la posición de la imagen
+            Portaretrato.Location = new Point(Portaretrato.Location.X + dx, Portaretrato.Location.Y + dy);
         }
 
         private void btn_rotar_Click(object sender, EventArgs e)
         {
-            if (int.TryParse(txtrotacion.Text, out int gradosrotacion))
-            {
-                // Llama a la función para escalar el polígono
-                RotarImagen(gradosrotacion);
-            }
-            else
-            {
-                MessageBox.Show("Ingresa grados válidos para la rotacion del poligono.");
-            }
+            // Aplicar la rotación alrededor del centro de la imagen
+            transformationMatrix.Multiply(MatrixForRotation(5));
+
+            ApplyTransformation();
         }
 
-        private void btn_escalar_Click(object sender, EventArgs e)
+        private void btni_escalarmas_Click(object sender, EventArgs e)
         {
+            // Aplicar el escalado alrededor del centro de la imagen
+            transformationMatrix.Multiply(MatrixForScaling(scaleFactor, scaleFactor));
 
+            ApplyTransformation();
         }
-
-
-        private void CargarImagen(string rutaImagen)
+        private void btni_escalarmenos_Click(object sender, EventArgs e)
         {
-            // Intentar cargar la imagen
-            try
-            {
-                // Cargar la imagen desde el archivo
-                Image imagen = Image.FromFile(rutaImagen);
+            transformationMatrix.Multiply(MatrixForScaling(1.0f / scaleFactor, 1.0f / scaleFactor));
 
-                // Asignar la imagen al PictureBox
-                Portaretrato.Image = imagen;
-            }
-            catch (Exception ex)
-            {
-                // Manejar cualquier excepción que pueda ocurrir al cargar la imagen
-                MessageBox.Show("Error al cargar la imagen: " + ex.Message);
-            }
+            ApplyTransformation();
         }
 
-        private Random random = new Random();
-
-        private void TrasladarImagenAleatoriamente()
+        private void Initialize()
         {
-            if (Portaretrato.Image != null)
-            {
-                // Definir la cantidad máxima de traslación en píxeles (ajústala según tus necesidades)
-                int maxTraslacionX = Portaretrato.Width / 4;
-                int maxTraslacionY = Portaretrato.Height / 4;
-
-                int traslacionX = random.Next(-maxTraslacionX, maxTraslacionX + 1);
-                int traslacionY = random.Next(-maxTraslacionY, maxTraslacionY + 1);
-
-                Portaretrato.Location = new Point(Portaretrato.Location.X + traslacionX, Portaretrato.Location.Y + traslacionY);
-            }
+            transformationMatrix = new Matrix();
         }
 
-        private void RotarImagen(float grados)
+        private void LoadImage(string imagePath)
         {
-            if (Portaretrato.Image != null)
-            {
-                Bitmap imagenRotada = new Bitmap(Portaretrato.Image.Width, Portaretrato.Image.Height);
-                using (Graphics g = Graphics.FromImage(imagenRotada))
-                {
-                    g.TranslateTransform((float)imagenRotada.Width / 2, (float)imagenRotada.Height / 2);
-                    g.RotateTransform(grados);
-                    g.TranslateTransform(-(float)imagenRotada.Width / 2, -(float)imagenRotada.Height / 2);
-                    g.DrawImage(Portaretrato.Image, new Point(0, 0));
-                }
-                Portaretrato.Image = imagenRotada;
-            }
+            // Cargar la imagen original desde la ruta proporcionada
+            originalImage = new Bitmap(imagePath);
+
+            // Crear una copia de la imagen original para aplicar transformaciones
+            transformedImage = new Bitmap(originalImage);
+
+            // Mostrar la imagen original en el PictureBox
+            Portaretrato.Image = originalImage;
         }
 
-        private void EscalarImagen(float factorEscala)
+        private void ApplyTransformation()
         {
-            if (Portaretrato.Image != null)
+            // Aplicar la transformación a la imagen transformada
+            using (Graphics g = Graphics.FromImage(transformedImage))
             {
-                int nuevaAnchura = (int)(Portaretrato.Image.Width * factorEscala);
-                int nuevaAltura = (int)(Portaretrato.Image.Height * factorEscala);
-                Portaretrato.Image = new Bitmap(Portaretrato.Image, nuevaAnchura, nuevaAltura);
+                g.Clear(Color.White); // Limpiar la imagen
+                g.Transform = transformationMatrix;
+                g.DrawImage(originalImage, 0, 0);
             }
+
+            // Mostrar la imagen transformada en el PictureBox
+            Portaretrato.Image = transformedImage;
         }
+
+        private Matrix MatrixForTranslation(float dx, float dy)
+        {
+            Matrix translationMatrix = new Matrix();
+            translationMatrix.Translate(dx, dy);
+            return translationMatrix;
+        }
+
+        private Matrix MatrixForScaling(float scaleX, float scaleY)
+        {
+            // Escala alrededor del punto central de la imagen
+            Matrix scalingMatrix = new Matrix();
+            scalingMatrix.Translate(originalImage.Width / 2, originalImage.Height / 2);
+            scalingMatrix.Scale(scaleX, scaleY);
+            scalingMatrix.Translate(-originalImage.Width / 2, -originalImage.Height / 2);
+            return scalingMatrix;
+        }
+
+        private Matrix MatrixForRotation(float angle)
+        {
+            // Rota alrededor del punto central de la imagen
+            Matrix rotationMatrix = new Matrix();
+            rotationMatrix.Translate(originalImage.Width / 2, originalImage.Height / 2);
+            rotationMatrix.Rotate(angle);
+            rotationMatrix.Translate(-originalImage.Width / 2, -originalImage.Height / 2);
+            return rotationMatrix;
+        }
+
+
+
 
 
     }
