@@ -40,6 +40,9 @@
             this.btn_escalarmenos = new System.Windows.Forms.Button();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.btn_color = new System.Windows.Forms.Button();
+            this.btn_gradientcolor = new System.Windows.Forms.Button();
+            this.btn_material = new System.Windows.Forms.Button();
+            this.btn_texture = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Lienzo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -120,7 +123,7 @@
             // 
             // btn_salir
             // 
-            this.btn_salir.Location = new System.Drawing.Point(823, 232);
+            this.btn_salir.Location = new System.Drawing.Point(823, 276);
             this.btn_salir.Name = "btn_salir";
             this.btn_salir.Size = new System.Drawing.Size(398, 52);
             this.btn_salir.TabIndex = 16;
@@ -148,11 +151,44 @@
             this.btn_color.UseVisualStyleBackColor = true;
             this.btn_color.Click += new System.EventHandler(this.btn_color_Click);
             // 
+            // btn_gradientcolor
+            // 
+            this.btn_gradientcolor.Location = new System.Drawing.Point(823, 218);
+            this.btn_gradientcolor.Name = "btn_gradientcolor";
+            this.btn_gradientcolor.Size = new System.Drawing.Size(108, 52);
+            this.btn_gradientcolor.TabIndex = 19;
+            this.btn_gradientcolor.Text = "Degradado de Color\r\n";
+            this.btn_gradientcolor.UseVisualStyleBackColor = true;
+            this.btn_gradientcolor.Click += new System.EventHandler(this.btn_gradientcolor_Click);
+            // 
+            // btn_material
+            // 
+            this.btn_material.Location = new System.Drawing.Point(965, 214);
+            this.btn_material.Name = "btn_material";
+            this.btn_material.Size = new System.Drawing.Size(108, 52);
+            this.btn_material.TabIndex = 20;
+            this.btn_material.Text = "Cambia el material del poligono";
+            this.btn_material.UseVisualStyleBackColor = true;
+            this.btn_material.Click += new System.EventHandler(this.btn_material_Click);
+            // 
+            // btn_texture
+            // 
+            this.btn_texture.Location = new System.Drawing.Point(1113, 218);
+            this.btn_texture.Name = "btn_texture";
+            this.btn_texture.Size = new System.Drawing.Size(108, 52);
+            this.btn_texture.TabIndex = 21;
+            this.btn_texture.Text = "Cambia la textura del poligono";
+            this.btn_texture.UseVisualStyleBackColor = true;
+            this.btn_texture.Click += new System.EventHandler(this.btn_texture_Click);
+            // 
             // frmPoligono
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1253, 681);
+            this.Controls.Add(this.btn_texture);
+            this.Controls.Add(this.btn_material);
+            this.Controls.Add(this.btn_gradientcolor);
             this.Controls.Add(this.btn_color);
             this.Controls.Add(this.btn_escalarmenos);
             this.Controls.Add(this.btn_salir);
@@ -186,6 +222,9 @@
         private System.Windows.Forms.Button btn_escalarmenos;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Button btn_color;
+        private System.Windows.Forms.Button btn_gradientcolor;
+        private System.Windows.Forms.Button btn_material;
+        private System.Windows.Forms.Button btn_texture;
     }
 }
 

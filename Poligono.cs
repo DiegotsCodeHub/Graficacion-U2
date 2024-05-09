@@ -209,5 +209,108 @@ namespace Cruz_Patiño_Diego___Proyecto_Graficacion_U2
             lastLocation = e.Location;
         }
 
+        private void btn_gradientcolor_Click(object sender, EventArgs e)
+        {
+            // Crea los cuadros de diálogo para seleccionar los colores
+            using (ColorDialog colorDialog1 = new ColorDialog())
+            using (ColorDialog colorDialog2 = new ColorDialog())
+            {
+                // Muestra el primer cuadro de diálogo
+                if (colorDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    // Muestra el segundo cuadro de diálogo
+                    if (colorDialog2.ShowDialog() == DialogResult.OK)
+                    {
+                        // Obtiene los colores seleccionados
+                        Color color1 = colorDialog1.Color;
+                        Color color2 = colorDialog2.Color;
+
+                        // Crea un nuevo objeto LinearGradientBrush
+                        using (LinearGradientBrush brush = new LinearGradientBrush(transformedPoints[0], transformedPoints[numLados / 2], color1, color2))
+                        {
+                            // Limpia el lienzo
+                            graphics.Clear(Color.White);
+
+                            // Dibuja el polígono con el degradado
+                            graphics.FillPolygon(brush, transformedPoints);
+
+                            // Dibuja el contorno del polígono
+                            using (Pen pen = new Pen(Color.Black, 1.0f))
+                            {
+                                graphics.DrawPolygon(pen, transformedPoints);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btn_material_Click(object sender, EventArgs e)
+        {
+            // Crea el cuadro de diálogo para seleccionar el archivo de textura
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                // Configura el cuadro de diálogo para aceptar solo archivos de imagen
+                openFileDialog.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg; *.jpeg; *.gif; *.bmp; *.png";
+
+                // Muestra el cuadro de diálogo
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Carga la imagen de textura
+                    using (Image texture = Image.FromFile(openFileDialog.FileName))
+                    {
+                        // Crea un nuevo objeto TextureBrush
+                        using (TextureBrush brush = new TextureBrush(texture))
+                        {
+                            // Limpia el lienzo
+                            graphics.Clear(Color.White);
+
+                            // Dibuja el polígono con la textura
+                            graphics.FillPolygon(brush, transformedPoints);
+
+                            // Dibuja el contorno del polígono
+                            using (Pen pen = new Pen(Color.Black, 1.0f))
+                            {
+                                graphics.DrawPolygon(pen, transformedPoints);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btn_texture_Click(object sender, EventArgs e)
+        {
+            // Crea el cuadro de diálogo para seleccionar el archivo de textura
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                // Configura el cuadro de diálogo para aceptar solo archivos de imagen
+                openFileDialog.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg; *.jpeg; *.gif; *.bmp; *.png";
+
+                // Muestra el cuadro de diálogo
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Carga la imagen de textura
+                    using (Image texture = Image.FromFile(openFileDialog.FileName))
+                    {
+                        // Crea un nuevo objeto TextureBrush
+                        using (TextureBrush brush = new TextureBrush(texture))
+                        {
+                            // Limpia el lienzo
+                            graphics.Clear(Color.White);
+
+                            // Dibuja el polígono con la textura
+                            graphics.FillPolygon(brush, transformedPoints);
+
+                            // Dibuja el contorno del polígono
+                            using (Pen pen = new Pen(Color.Black, 1.0f))
+                            {
+                                graphics.DrawPolygon(pen, transformedPoints);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
